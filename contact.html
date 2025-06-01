@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Form Card</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Helvetica", "Arial", sans-serif;
+      background-color: #f7f7f7;
+    }
+
+    .card {
+      background: #fff;
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+    }
+
+    .card h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: auto;
+      min-width: 100px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      background: #fafafa;
+      width: 100%;
+      transition: all 0.3s ease;
+      border-radius: 6px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #e8554e;
+      outline: none;
+    }
+
+    .form-group label {
+      position: absolute;
+      top: -12px;
+      left: 10px;
+      background: #fff;
+      padding: 0 5px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #e8554e;
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #c7443f;
+    }
+
+    #fade {
+      opacity: 0;
+      display: none;
+    }
+
+    .thanks_layout {
+      text-align: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: rgba(255, 255, 255, .8);
+      z-index: 99999;
+    }
+
+    .thanks_message {
+      background: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      border: 1px solid #DEDEDE;
+      color: #333;
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      width: 80%;
+      max-width: 400px;
+    }
+
+    .thanks_message h2 {
+      margin-bottom: 10px;
+    }
+
+    .thanks_message .close a {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 25px;
+      height: 25px;
+      line-height: 25px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 100%;
+      color: #333;
+      font-size: 18px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h2>Contact Us</h2>
+    <form onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required oninput="this.size = Math.max(this.value.length, 1)">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required oninput="this.size = Math.max(this.value.length, 1)">
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone No</label>
+        <input type="tel" id="phone" name="phone" required
+         maxlength="10" pattern="\d{10}"
+         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+         title="Enter a valid 10-digit phone number">
+        </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+      </div>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+
+  <div id="fade">
+    <div class="thanks_layout">
+      <div class="thanks_message">
+        <img alt="Thumb" height="48" width="48"
+          src="https://4.bp.blogspot.com/-rY5km74yj_I/V1ItqrbspBI/AAAAAAAAmxA/SK-aLPTjyuo8uiSYylRJ4tLslk2LJ581QCLcB/s1600/ic_thumb_up_black_24dp_2x.png" />
+        <h2>Form submitted successfully</h2>
+        <div class="close"><a href="javascript:void(0)" onclick="closePopup()" title="Close">&times;</a></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault(); // prevent actual submission
+      fadeEffect.init('fade', 1);
+      document.getElementById('fade').style.display = 'block';
+      setTimeout(() => {
+        document.querySelector('form').reset();
+      }, 500);
+    }
+
+    function closePopup() {
+      document.getElementById('fade').style.display = 'none';
+    }
+
+    var fadeEffect = {
+      init: function (id, flag, target) {
+        this.elem = document.getElementById(id);
+        clearInterval(this.elem.si);
+        this.target = target ? target : flag ? 100 : 0;
+        this.flag = flag || -1;
+        this.alpha = this.elem.style.opacity ? parseFloat(this.elem.style.opacity) * 100 : 0;
+        this.elem.si = setInterval(function () {
+          fadeEffect.tween();
+        }, 20);
+      },
+      tween: function () {
+        if (this.alpha == this.target) {
+          clearInterval(this.elem.si);
+        } else {
+          var value = Math.round(this.alpha + ((this.target - this.alpha) * .05)) + (1 * this.flag);
+          this.elem.style.opacity = value / 100;
+          this.elem.style.filter = 'alpha(opacity=' + value + ')';
+          this.alpha = value
+        }
+      }
+    };
+  </script>
+
+</body>
+
+</html>
